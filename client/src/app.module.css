@@ -1,0 +1,38 @@
+.container {
+  width: 80%;
+  margin: 5px auto;
+}
+div {
+  margin: 0px;
+  padding: 0px;
+}
+h2 {
+  margin: 10px 0px;
+  color: rgba(0, 0, 0, 0.7);
+}
+.flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0px;
+  padding: 0px;
+}
+.button {
+  width: 20%;
+  min-width: 180px;
+  height: 100%;
+  margin: 0px;
+  margin-right: 3px;
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  background-color: rgba(14, 0, 0, 0.7);
+  /*background-color: rgb(10, 90, 170);*/
+  font-weight: bold;
+  cursor: pointer;
+}
+.button:hover {
+  background-color: gray;
+}

@@ -1,0 +1,17 @@
+.flex {
+  width: 100%;
+  margin: 20px 0px 5px;
+  padding: 5px 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid lightgray;
+  border-radius: 3px;
+}
+.profit {
+  color: darkturquoise;
+}
+.expense {
+  color: crimson;
+}
