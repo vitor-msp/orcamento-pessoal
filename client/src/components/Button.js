@@ -1,9 +1,9 @@
-import React from 'react';
-import css from './button.module.css';
+import React from "react";
+import css from "./button.module.css";
 
-export default function Nav({ type, transaction, onDelete, onEdit }) {
+export default function Button({ type, transaction, onDelete, onEdit }) {
   const handleClick = () => {
-    type === 'delete' ? onDelete(transaction._id) : onEdit(transaction);
+    type === "delete" ? onDelete(transaction._id) : onEdit(transaction);
   };
 
   return (

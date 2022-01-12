@@ -3,7 +3,7 @@
   margin: 20px 0px 5px;
   padding: 5px 5px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   border: 1px solid lightgray;
@@ -14,4 +14,17 @@
 }
 .expense {
   color: crimson;
+}
+.statItem {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+@media screen and (min-width: 576px) {
+  .flex {
+    flex-direction: row;
+  }
+  .statItem {
+    width: 25%;
+  }
 }

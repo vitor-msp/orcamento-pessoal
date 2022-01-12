@@ -1,5 +1,5 @@
 .div {
-  width: 80%;
+  width: 100%;
 }
 .input {
   height: 100%;
@@ -13,4 +13,9 @@
 .input:hover {
   border-bottom: 1px solid rgba(0, 0, 0, 0.7);
   color: rgba(0, 0, 0, 1);
+}
+@media screen and (min-width: 576px) {
+  .div {
+    padding-left: 5px;
+  }
 }

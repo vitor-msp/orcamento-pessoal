@@ -1,7 +1,7 @@
-import React from 'react';
-import Button from './Button.js';
-import { remove } from '../api/api.js';
-import css from './list.module.css';
+import React from "react";
+import Button from "./Button.js";
+import { remove } from "../api/api.js";
+import css from "./list.module.css";
 
 export default function List({
   currentTransactions,
@@ -12,7 +12,7 @@ export default function List({
   const handleDelete = async (id) => {
     try {
       const res = await remove(id);
-      if (res === true) {
+      if (res) {
         const filteredTransactions = allTransactions.filter((transaction) => {
           return transaction._id !== id;
         });
@@ -35,14 +35,14 @@ export default function List({
         {currentTransactions.map((transaction) => {
           const { _id, description, category, type, value, yearMonthDay } =
             transaction;
-          const formatedValue = value.toLocaleString('pt-br', {
-            style: 'currency',
-            currency: 'BRL',
+          const formatedValue = value.toLocaleString("pt-br", {
+            style: "currency",
+            currency: "BRL",
             minimumFractionDigits: 2,
           });
-          const day = yearMonthDay.split('-')[2];
+          const day = yearMonthDay.split("-")[2];
           const classLi =
-            type === '+'
+            type === "+"
               ? { backgroundColor: `rgba(0, 206, 209, 0.4)` }
               : { backgroundColor: `rgba(220, 20, 60, 0.45)` };
           return (
@@ -59,13 +59,13 @@ export default function List({
                 <span className={css.value}>{formatedValue}</span>
                 <div className={css.buttons}>
                   <Button
-                    type={'edit'}
+                    type={"edit"}
                     transaction={transaction}
                     onDelete={handleDelete}
                     onEdit={handleEdit}
                   />
                   <Button
-                    type={'delete'}
+                    type={"delete"}
                     transaction={transaction}
                     onDelete={handleDelete}
                     onEdit={handleEdit}
