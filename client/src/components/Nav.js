@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import css from "./nav.module.css";
 import { defaultPeriod } from "../store/defaultPeriod";
 import { useDispatch } from "react-redux";
-import { changeCurrentPeriod } from "../store/actions/changeCurrentPeriod";
+import { changeCurrentPeriod } from "../store/actions/currentPeriod.actions";
 
 export default function Nav({ years }) {
   const [periodSelected, setPeriodSelected] = useState(defaultPeriod.text);

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {changeCurrentText} from '../store/actions/currentText.actions'
 import css from './search.module.css';
 
 export default function Search({ transactions, newTransactions }) {
-  const [currentText, setCurrentText] = useState('');
+  // const [currentText, setCurrentText] = useState('');
+  const currentText = useSelector(state => state.currentText)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     searchText(currentText);
@@ -10,7 +14,8 @@ export default function Search({ transactions, newTransactions }) {
   }, [transactions]);
 
   const handleSearchChange = (event) => {
-    setCurrentText(event.target.value);
+    // setCurrentText(event.target.value);
+    dispatch(changeCurrentText(event.target.value));
     searchText(event.target.value);
   };
 

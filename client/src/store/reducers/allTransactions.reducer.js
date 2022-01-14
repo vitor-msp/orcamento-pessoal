@@ -1,9 +1,7 @@
-import {getByPeriod} from '../../api/api'
-
-export const allTransactionsReducer = (state = getByPeriod("2021-06"), action)=>{
+export const allTransactionsReducer = (state = [], action)=>{
   switch (action.type) {
-    case 'action':
-      break;
+    case 'fetchedTransactions':
+      return action.payload;
   
     default:
       return state;

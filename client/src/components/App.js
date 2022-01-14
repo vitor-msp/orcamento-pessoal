@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getByPeriod } from "../api/api.js";
-import { changeCurrentPeriod } from "../store/actions/changeCurrentPeriod";
+import { changeCurrentPeriod } from "../store/actions/currentPeriod.actions";
 
 import Nav from "./Nav.js";
 import Stat from "./Statistics.js";
@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
+  // const allTransactions = useSelector(state => state.allTransactions)
   const [searchedTransactions, setSearchedTransactions] = useState([]);
   const [distinctYears, setDistinctYears] = useState([]);
   const [modalContent, setModalContent] = useState(null);
