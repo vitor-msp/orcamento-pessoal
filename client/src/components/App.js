@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { getByPeriod } from './api/api.js';
+import React, { useState, useEffect } from "react";
+import { getByPeriod } from "../api/api.js";
 
-import Nav from './components/Nav.js';
-import Stat from './components/Statistics.js';
-import Search from './components/Search.js';
-import List from './components/List.js';
-import ModalTransaction from './components/Modal.js';
-import css from './app.module.css';
+import Nav from "./Nav.js";
+import Stat from "./Statistics.js";
+import Search from "./Search.js";
+import List from "./List.js";
+import ModalTransaction from "./Modal.js";
+import css from "./app.module.css";
 
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
   const [searchedTransactions, setSearchedTransactions] = useState([]);
   const [distinctYears, setDistinctYears] = useState([]);
   const [modalContent, setModalContent] = useState(null);
-  const [currentPeriod, setCurrentPeriod] = useState('2021-06');
+  const [currentPeriod, setCurrentPeriod] = useState("2021-06");
 
   //effect inicial
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function App() {
         <button
           className={css.button}
           onClick={() => {
-            setModalContent('Post');
+            setModalContent("Post");
           }}
         >
           + NOVO LANÇAMENTO
