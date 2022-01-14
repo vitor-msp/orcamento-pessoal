@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getByPeriod } from "../api/api.js";
+import { changeCurrentPeriod } from "../store/actions/changeCurrentPeriod";
 
 import Nav from "./Nav.js";
 import Stat from "./Statistics.js";
@@ -7,18 +8,14 @@ import Search from "./Search.js";
 import List from "./List.js";
 import ModalTransaction from "./Modal.js";
 import css from "./app.module.css";
+import { useSelector } from "react-redux";
 
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
   const [searchedTransactions, setSearchedTransactions] = useState([]);
   const [distinctYears, setDistinctYears] = useState([]);
   const [modalContent, setModalContent] = useState(null);
-  const [currentPeriod, setCurrentPeriod] = useState("2021-06");
-
-  //effect inicial
-  useEffect(() => {
-    getTransactions();
-  }, []);
+  const currentPeriod = useSelector((state) => state.currentPeriod);
 
   async function getTransactions() {
     const data = await getByPeriod(currentPeriod);
@@ -52,12 +49,7 @@ export default function App() {
       </div>
 
       <div className={css.flex}>
-        <Nav
-          years={distinctYears}
-          periodToSearch={(period) => {
-            setCurrentPeriod(period);
-          }}
-        />
+        <Nav years={distinctYears} />
       </div>
 
       <div className={css.flex} style={{ justifyContent: `left` }}>

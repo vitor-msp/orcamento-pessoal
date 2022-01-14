@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
-import css from './nav.module.css';
+import React, { useState } from "react";
+import css from "./nav.module.css";
+import { defaultPeriod } from "../store/defaultPeriod";
+import { useDispatch } from "react-redux";
+import { changeCurrentPeriod } from "../store/actions/changeCurrentPeriod";
 
-export default function Nav({ years, periodToSearch }) {
-  const [periodSelected, setPeriodSelected] = useState('Jun/2021');
+export default function Nav({ years }) {
+  const [periodSelected, setPeriodSelected] = useState(defaultPeriod.text);
+  const dispatch = useDispatch();
 
   const months = [
-    'Jan',
-    'Fev',
-    'Mar',
-    'Abr',
-    'Mai',
-    'Jun',
-    'Jul',
-    'Ago',
-    'Set',
-    'Out',
-    'Nov',
-    'Dez',
+    "Jan",
+    "Fev",
+    "Mar",
+    "Abr",
+    "Mai",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Set",
+    "Out",
+    "Nov",
+    "Dez",
   ];
 
   const periods = [];
@@ -28,11 +32,20 @@ export default function Nav({ years, periodToSearch }) {
 
   const handleSelectChange = (event) => {
     setPeriodSelected(event.target.value);
-    searchPeriod(event.target.value);
+    dispatch(changeCurrentPeriod(periodFromTextToNumber(event.target.value)));
   };
 
-  const searchPeriod = (period) => {
-    const arrayPeriod = period.split('/');
+  const handleClick = (event) => {
+    let index = periods.findIndex((period) => {
+      return period === periodSelected;
+    });
+    event.target.value === "+" ? index++ : index--;
+    setPeriodSelected(periods[index]);
+    dispatch(changeCurrentPeriod(periodFromTextToNumber(periods[index])));
+  };
+
+  const periodFromTextToNumber = (period) => {
+    const arrayPeriod = period.split("/");
     let monthNumber =
       months.findIndex((month) => {
         return month === arrayPeriod[0];
@@ -40,23 +53,14 @@ export default function Nav({ years, periodToSearch }) {
     if (monthNumber.toString().length === 1) {
       monthNumber = `0${monthNumber}`;
     }
-    periodToSearch(`${arrayPeriod[1]}-${monthNumber}`);
-  };
-
-  const handleClick = (event) => {
-    let index = periods.findIndex((period) => {
-      return period === periodSelected;
-    });
-    event.target.value === '+' ? index++ : index--;
-    setPeriodSelected(periods[index]);
-    searchPeriod(periods[index]);
+    return `${arrayPeriod[1]}-${monthNumber}`;
   };
 
   return (
     <div className={css.flex}>
       <button
         className={`${css.button} ${css.leftButton}`}
-        value={'-'}
+        value={"-"}
         onClick={handleClick}
       >
         &lt;
@@ -79,7 +83,7 @@ export default function Nav({ years, periodToSearch }) {
 
       <button
         className={`${css.button} ${css.rightButton}`}
-        value={'+'}
+        value={"+"}
         onClick={handleClick}
       >
         &gt;
