@@ -2,78 +2,84 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { post, update } from "../api/api.js";
 import css from "./modal.module.css";
+import {updateTransaction, createTransaction, removeTransaction} from '../store/actions/allTransactions.actions'
+import {toggleModal} from '../store/actions/isModalOpen.actions';
+import { useDispatch, useSelector } from "react-redux";
 
 Modal.setAppElement("#root");
 
 export default function ModalTransaction({
-  modalContent,
-  onEsc,
-  transactions,
-  updatedTransactions,
+  // modalContent,
+  // onEsc,
+  // transactions,
+  selectedTransaction,
   currentPeriod,
+  isPost
+  // isOpen
 }) {
-  const [modalOpen, setModalOpen] = useState(true);
+  // const [modalOpen, setModalOpen] = useState(isOpen);
   const [message, setMessage] = useState("");
   const [colorMessage, setColorMessage] = useState({ color: "orange" });
   // const [expenseChecked, setExpenseChecked] = useState();
-  const [content, setContent] = useState({
-    _id: "",
-    type: "",
-    description: "",
-    descriptionLowerCase: "",
-    category: "",
-    value: 0,
-    yearMonthDay: "",
-  });
+  const [currentTransaction, setCurrentTransaction] = useState(selectedTransaction);
+  // const selectedTransaction = useSelector((state) => state.selectedTransaction);
+  const isModalOpen = useSelector(state => state.isModalOpen)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  });
+  },[]);
+
+  // useEffect(() => {
+  //   setCurrentTransaction(selectedTransaction);
+  //   setIsPost(selectedTransaction._id === "" ? true : false);
+  //   return () => {};
+  // },[selectedTransaction]);
 
   const handleKeyDown = (event) => {
-    event.key === "Escape" && onEsc(null);
+    event.key === "Escape" && dispatch(toggleModal(false));
     event.key === "Enter" && handleSave();
   };
 
-  useEffect(() => {
-    testTransaction();
+  // useEffect(() => {
+  //   testTransaction();
 
-    return () => {};
-  }, [modalContent]);
+  //   return () => {};
+  // }, [modalContent]);
 
-  const testTransaction = () => {
-    if (modalContent === "Post") {
-      return;
-    }
-    setContent({
-      _id: modalContent._id,
-      type: modalContent.type,
-      description: modalContent.description,
-      descriptionLowerCase: modalContent.description.toLowerCase(),
-      category: modalContent.category,
-      value: modalContent.value,
-      yearMonthDay: modalContent.yearMonthDay,
-    });
-  };
+  // const testTransaction = () => {
+  //   if (modalContent === "Post") {
+  //     return;
+  //   }
+  //   setCurrentTransaction({
+  //     _id: modalContent._id,
+  //     type: modalContent.type,
+  //     description: modalContent.description,
+  //     descriptionLowerCase: modalContent.description.toLowerCase(),
+  //     category: modalContent.category,
+  //     value: modalContent.value,
+  //     yearMonthDay: modalContent.yearMonthDay,
+  //   });
+  // };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     if (name === "description") {
-      setContent({
-        ...content,
+      setCurrentTransaction({
+        ...currentTransaction,
         ["description"]: value,
         ["descriptionLowerCase"]: value.toLowerCase(),
       });
       return;
     }
     if (name === "value") {
-      setContent({ ...content, [name]: parseFloat(value) });
+      setCurrentTransaction({ ...currentTransaction, [name]: parseFloat(value) });
       return;
     }
-    setContent({ ...content, [name]: value });
+    setCurrentTransaction({ ...currentTransaction, [name]: value });
   };
 
   const handleSave = () => {
@@ -84,7 +90,7 @@ export default function ModalTransaction({
       category,
       value,
       yearMonthDay,
-    } = content;
+    } = currentTransaction;
     if (
       (type === "") |
       (description === "") |
@@ -98,12 +104,14 @@ export default function ModalTransaction({
       return;
     }
     setMessage("");
-    modalContent === "Post" ? handlePost() : handleUpdate();
+    isPost ? handlePost() : handleUpdate();
   };
 
   const handlePost = async () => {
     try {
-      const data = await post(content);
+      const data = await post(currentTransaction);
+      console.log('data');
+      console.log(data);
       if (data.yearMonth === currentPeriod) {
         const { _id, type, description, category, value, yearMonthDay } = data;
         const postedTransaction = {
@@ -115,13 +123,14 @@ export default function ModalTransaction({
           value,
           yearMonthDay,
         };
-        const newTransactions = Object.assign([], transactions);
-        newTransactions.push(postedTransaction);
-        updatedTransactions(sortTransactions(newTransactions));
+        dispatch(createTransaction(postedTransaction));
+        // const newTransactions = Object.assign([], transactions);
+        // newTransactions.push(postedTransaction);
+        // updatedTransactions(sortTransactions(newTransactions));
       }
       setMessage(`Salvo com sucesso!`);
       setColorMessage({ color: "green" });
-      setContent({
+      setCurrentTransaction({
         _id: "",
         type: "",
         description: "",
@@ -131,6 +140,7 @@ export default function ModalTransaction({
         yearMonthDay: "",
       });
     } catch (error) {
+      console.log(error);
       setMessage(`Erro ao salvar!`);
       setColorMessage({ color: "red" });
     }
@@ -138,48 +148,52 @@ export default function ModalTransaction({
 
   const handleUpdate = async () => {
     try {
-      await update(content);
+      await update(currentTransaction);
       setMessage(`Salvo com sucesso!`);
       setColorMessage({ color: "green" });
-      const arrayDate = content.yearMonthDay.split("-");
+      const arrayDate = currentTransaction.yearMonthDay.split("-");
       const currentDate = `${arrayDate[0]}-${arrayDate[1]}`;
       if (currentDate === currentPeriod) {
-        const index = transactions.findIndex((transaction) => {
-          return transaction._id === content._id;
-        });
-        const newTransactions = Object.assign([], transactions);
-        newTransactions[index] = content;
-        updatedTransactions(sortTransactions(newTransactions));
+        // const index = transactions.findIndex((transaction) => {
+        //   return transaction._id === currentTransaction._id;
+        // });
+        // const newTransactions = Object.assign([], transactions);
+        // newTransactions[index] = currentTransaction;
+        // updatedTransactions(sortTransactions(newTransactions));
+
+        dispatch(updateTransaction(currentTransaction));
         return;
       }
-      const filteredTransactions = transactions.filter((transaction) => {
-        return transaction._id !== content._id;
-      });
-      updatedTransactions(filteredTransactions);
+      // const filteredTransactions = transactions.filter((transaction) => {
+      //   return transaction._id !== currentTransaction._id;
+      // });
+      // updatedTransactions(filteredTransactions);
+      dispatch(removeTransaction(currentTransaction._id));
     } catch (error) {
       setMessage(`Erro ao salvar!`);
       setColorMessage({ color: "red" });
     }
   };
 
-  const sortTransactions = (transactions) => {
-    const sortedTransactions = transactions.sort((a, b) => {
-      return a.yearMonthDay.split("-")[2] - b.yearMonthDay.split("-")[2];
-    });
-    return sortedTransactions;
-  };
+  // const sortTransactions = (transactions) => {
+  //   const sortedTransactions = transactions.sort((a, b) => {
+  //     return a.yearMonthDay.split("-")[2] - b.yearMonthDay.split("-")[2];
+  //   });
+  //   return sortedTransactions;
+  // };
 
   return (
     <div>
-      <Modal isOpen={modalOpen} className={css.modal}>
+      <Modal isOpen={isModalOpen} className={css.modal}>
         <div className={css.header}>
           <h3>Edição de Lançamento</h3>
 
           <button
             className={css.close}
             onClick={() => {
-              setModalOpen(false);
-              onEsc(null);
+              // setModalOpen(false);
+              dispatch(toggleModal(false))
+              // onEsc(null);
             }}
           >
             X
@@ -191,22 +205,22 @@ export default function ModalTransaction({
             <div>
               <label
                 className={`${css.label} ${css.flex}`}
-                style={modalContent.type === "-" ? { fontWeight: "bold" } : {}}
-                style={modalContent === "Post" ? { cursor: "pointer" } : {}}
+                style={currentTransaction.type === "-" ? { fontWeight: "bold" } : {}}
+                style={isPost ? { cursor: "pointer" } : {}}
               >
                 <input
                   className={
-                    modalContent.type === "-"
+                    currentTransaction.type === "-"
                       ? `${css.radio} ${css.marked}`
                       : css.radio
                   }
-                  style={modalContent === "Post" ? { cursor: "pointer" } : {}}
+                  style={isPost ? { cursor: "pointer" } : {}}
                   type="radio"
                   name="type"
-                  disabled={modalContent === "Post" ? false : true}
+                  disabled={isPost ? false : true}
                   onClick={() => {
-                    setContent({
-                      ...content,
+                    setCurrentTransaction({
+                      ...currentTransaction,
                       ["type"]: "-",
                     });
                   }}
@@ -219,22 +233,22 @@ export default function ModalTransaction({
             <div>
               <label
                 className={`${css.label} ${css.flex}`}
-                style={modalContent.type === "+" ? { fontWeight: "bold" } : {}}
-                style={modalContent === "Post" ? { cursor: "pointer" } : {}}
+                style={currentTransaction.type === "+" ? { fontWeight: "bold" } : {}}
+                style={isPost ? { cursor: "pointer" } : {}}
               >
                 <input
                   className={
-                    modalContent.type === "+"
+                    currentTransaction.type === "+"
                       ? `${css.radio} ${css.marked}`
                       : css.radio
                   }
-                  style={modalContent === "Post" ? { cursor: "pointer" } : {}}
+                  style={isPost ? { cursor: "pointer" } : {}}
                   type="radio"
                   name="type"
-                  disabled={modalContent === "Post" ? false : true}
+                  disabled={isPost ? false : true}
                   onClick={() => {
-                    setContent({
-                      ...content,
+                    setCurrentTransaction({
+                      ...currentTransaction,
                       ["type"]: "+",
                     });
                   }}
@@ -251,7 +265,7 @@ export default function ModalTransaction({
               className={css.text}
               type="text"
               name="description"
-              value={content.description}
+              value={currentTransaction.description}
               onChange={handleInputChange}
               required
             />
@@ -263,7 +277,7 @@ export default function ModalTransaction({
               className={css.text}
               type="text"
               name="category"
-              value={content.category}
+              value={currentTransaction.category}
               onChange={handleInputChange}
               required
             />
@@ -276,7 +290,7 @@ export default function ModalTransaction({
                 className={css.number}
                 type="number"
                 name="value"
-                value={content.value}
+                value={currentTransaction.value}
                 onChange={handleInputChange}
                 required
               />
@@ -288,7 +302,7 @@ export default function ModalTransaction({
                 className={css.date}
                 type="date"
                 name="yearMonthDay"
-                value={content.yearMonthDay}
+                value={currentTransaction.yearMonthDay}
                 onChange={handleInputChange}
                 required
               />

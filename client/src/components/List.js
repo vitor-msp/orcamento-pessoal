@@ -1,38 +1,18 @@
 import React from "react";
 import Button from "./Button.js";
-import { remove } from "../api/api.js";
 import css from "./list.module.css";
 
 export default function List({
-  currentTransactions,
-  allTransactions,
-  newTransactions,
-  modalContent,
+  transactions,
+  // allTransactions,
+  // newTransactions,
+  // modalContent,
 }) {
-  const handleDelete = async (id) => {
-    try {
-      const res = await remove(id);
-      if (res) {
-        const filteredTransactions = allTransactions.filter((transaction) => {
-          return transaction._id !== id;
-        });
-        newTransactions(filteredTransactions);
-      } else {
-        throw new Error(`Erro ao deletar item!`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleEdit = (transaction) => {
-    modalContent(transaction);
-  };
 
   return (
     <div className={css.flex}>
       <ul className={css.ul}>
-        {currentTransactions.map((transaction) => {
+        {transactions.map((transaction) => {
           const { _id, description, category, type, value, yearMonthDay } =
             transaction;
           const formatedValue = value.toLocaleString("pt-br", {
@@ -61,14 +41,14 @@ export default function List({
                   <Button
                     type={"edit"}
                     transaction={transaction}
-                    onDelete={handleDelete}
-                    onEdit={handleEdit}
+                    // onDelete={handleDelete}
+                    // onEdit={handleEdit}
                   />
                   <Button
                     type={"delete"}
                     transaction={transaction}
-                    onDelete={handleDelete}
-                    onEdit={handleEdit}
+                    // onDelete={handleDelete}
+                    // onEdit={handleEdit}
                   />
                 </div>
               </div>
