@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux";
-
 export const allTransactionsReducer = (state = [], action) => {
   const sortTransactions = (transactions) => {
     const sortedTransactions = transactions.sort((a, b) => {

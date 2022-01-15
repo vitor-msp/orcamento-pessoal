@@ -68,7 +68,6 @@ export default function Nav({ years }) {
 
       <select
         className={css.select}
-        //className={`browser-default`}
         value={periodSelected}
         onChange={handleSelectChange}
       >

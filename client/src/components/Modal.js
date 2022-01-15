@@ -9,20 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 Modal.setAppElement("#root");
 
 export default function ModalTransaction({
-  // modalContent,
-  // onEsc,
-  // transactions,
   selectedTransaction,
   currentPeriod,
   isPost
-  // isOpen
 }) {
-  // const [modalOpen, setModalOpen] = useState(isOpen);
   const [message, setMessage] = useState("");
   const [colorMessage, setColorMessage] = useState({ color: "orange" });
-  // const [expenseChecked, setExpenseChecked] = useState();
   const [currentTransaction, setCurrentTransaction] = useState(selectedTransaction);
-  // const selectedTransaction = useSelector((state) => state.selectedTransaction);
   const isModalOpen = useSelector(state => state.isModalOpen)
   const dispatch = useDispatch();
 
@@ -33,37 +26,10 @@ export default function ModalTransaction({
     };
   },[]);
 
-  // useEffect(() => {
-  //   setCurrentTransaction(selectedTransaction);
-  //   setIsPost(selectedTransaction._id === "" ? true : false);
-  //   return () => {};
-  // },[selectedTransaction]);
-
   const handleKeyDown = (event) => {
     event.key === "Escape" && dispatch(toggleModal(false));
     event.key === "Enter" && handleSave();
   };
-
-  // useEffect(() => {
-  //   testTransaction();
-
-  //   return () => {};
-  // }, [modalContent]);
-
-  // const testTransaction = () => {
-  //   if (modalContent === "Post") {
-  //     return;
-  //   }
-  //   setCurrentTransaction({
-  //     _id: modalContent._id,
-  //     type: modalContent.type,
-  //     description: modalContent.description,
-  //     descriptionLowerCase: modalContent.description.toLowerCase(),
-  //     category: modalContent.category,
-  //     value: modalContent.value,
-  //     yearMonthDay: modalContent.yearMonthDay,
-  //   });
-  // };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -124,9 +90,6 @@ export default function ModalTransaction({
           yearMonthDay,
         };
         dispatch(createTransaction(postedTransaction));
-        // const newTransactions = Object.assign([], transactions);
-        // newTransactions.push(postedTransaction);
-        // updatedTransactions(sortTransactions(newTransactions));
       }
       setMessage(`Salvo com sucesso!`);
       setColorMessage({ color: "green" });
@@ -154,33 +117,15 @@ export default function ModalTransaction({
       const arrayDate = currentTransaction.yearMonthDay.split("-");
       const currentDate = `${arrayDate[0]}-${arrayDate[1]}`;
       if (currentDate === currentPeriod) {
-        // const index = transactions.findIndex((transaction) => {
-        //   return transaction._id === currentTransaction._id;
-        // });
-        // const newTransactions = Object.assign([], transactions);
-        // newTransactions[index] = currentTransaction;
-        // updatedTransactions(sortTransactions(newTransactions));
-
         dispatch(updateTransaction(currentTransaction));
         return;
       }
-      // const filteredTransactions = transactions.filter((transaction) => {
-      //   return transaction._id !== currentTransaction._id;
-      // });
-      // updatedTransactions(filteredTransactions);
       dispatch(removeTransaction(currentTransaction._id));
     } catch (error) {
       setMessage(`Erro ao salvar!`);
       setColorMessage({ color: "red" });
     }
   };
-
-  // const sortTransactions = (transactions) => {
-  //   const sortedTransactions = transactions.sort((a, b) => {
-  //     return a.yearMonthDay.split("-")[2] - b.yearMonthDay.split("-")[2];
-  //   });
-  //   return sortedTransactions;
-  // };
 
   return (
     <div>
@@ -191,9 +136,7 @@ export default function ModalTransaction({
           <button
             className={css.close}
             onClick={() => {
-              // setModalOpen(false);
               dispatch(toggleModal(false))
-              // onEsc(null);
             }}
           >
             X

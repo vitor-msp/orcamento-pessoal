@@ -4,9 +4,6 @@ import css from "./list.module.css";
 
 export default function List({
   transactions,
-  // allTransactions,
-  // newTransactions,
-  // modalContent,
 }) {
 
   return (
@@ -41,14 +38,10 @@ export default function List({
                   <Button
                     type={"edit"}
                     transaction={transaction}
-                    // onDelete={handleDelete}
-                    // onEdit={handleEdit}
                   />
                   <Button
                     type={"delete"}
                     transaction={transaction}
-                    // onDelete={handleDelete}
-                    // onEdit={handleEdit}
                   />
                 </div>
               </div>

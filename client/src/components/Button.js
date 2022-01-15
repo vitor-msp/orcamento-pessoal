@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { remove } from "../api/api.js";
 import {changeSelectedTransaction} from '../store/actions/selectedTransaction.actions'
 import { removeTransaction } from "../store/actions/allTransactions.actions";
-// import { toggleModal } from "../store/actions/isModalOpen.actions";
 
 
 export default function Button({ type, transaction }) {
@@ -29,8 +28,6 @@ export default function Button({ type, transaction }) {
 
   const handleEdit = (transaction) => {
     dispatch(changeSelectedTransaction(transaction));
-    // dispatch(toggleModal(true));
-    // modalContent(transaction);
   };
 
   return (
