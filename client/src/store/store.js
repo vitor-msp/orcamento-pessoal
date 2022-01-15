@@ -4,6 +4,7 @@ import { currentPeriodReducer } from "./reducers/currentPeriod.reducer";
 import { currentTextReducer } from "./reducers/currentText.reducer";
 import { selectedTransactionReducer } from "./reducers/selectedTransaction.reducer";
 import { isModalOpenReducer } from "./reducers/isModalOpen.reducer";
+import { distinctYearsReducer } from "./reducers/distinctYears.reducer";
 
 const reducers = combineReducers({
   allTransactions: allTransactionsReducer,
@@ -11,7 +12,7 @@ const reducers = combineReducers({
   currentText: currentTextReducer,
   selectedTransaction: selectedTransactionReducer,
   isModalOpen: isModalOpenReducer,
-  // distinctYears: distinctYearsReducer,
+  distinctYears: distinctYearsReducer
 });
 
 export const store = createStore(reducers);

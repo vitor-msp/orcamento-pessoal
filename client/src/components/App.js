@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getByPeriod } from "../api/api.js";
 import { updateAllTransactions } from "../store/actions/allTransactions.actions";
 import { changeSelectedTransaction } from "../store/actions/selectedTransaction.actions";
-import {toggleModal} from '../store/actions/isModalOpen.actions';
+import { toggleModal } from "../store/actions/isModalOpen.actions";
 
 import Nav from "./Nav.js";
 import Stat from "./Stat.js";
@@ -12,6 +12,7 @@ import ModalTransaction from "./Modal.js";
 import css from "./app.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { searchTransactions } from "../store/selectors/allTransactions.selectors.js";
+import { updateDistinctYears } from "../store/actions/distinctYears.actions.js";
 
 const emptyTransaction = {
   _id: "",
@@ -25,7 +26,6 @@ const emptyTransaction = {
 
 export default function App() {
   const searchedTransactions = useSelector(searchTransactions);
-  const [distinctYears, setDistinctYears] = useState([]);
   const currentPeriod = useSelector((state) => state.currentPeriod);
   const selectedTransaction = useSelector((state) => state.selectedTransaction);
   const isModalOpen = useSelector((state) => state.isModalOpen);
@@ -33,7 +33,7 @@ export default function App() {
 
   async function getTransactions() {
     const data = await getByPeriod(currentPeriod);
-    setDistinctYears(data.distinctYears);
+    dispatch(updateDistinctYears(data.distinctYears));
     data.transactions = data.transactions.map(
       ({ _id, description, value, category, type, yearMonthDay }) => {
         return {
@@ -67,22 +67,21 @@ export default function App() {
       </div>
 
       <div className={css.flex}>
-        <Nav years={distinctYears} />
+        <Nav />
       </div>
 
       <div className={css.flex} style={{ justifyContent: `left` }}>
         <button
           className={css.button}
           onClick={() => {
-            const newEmptyTransaction = Object.assign({},emptyTransaction)
+            const newEmptyTransaction = Object.assign({}, emptyTransaction);
             dispatch(changeSelectedTransaction(newEmptyTransaction));
           }}
         >
           + NOVO LANÇAMENTO
         </button>
 
-        <Search
-        />
+        <Search />
       </div>
 
       <div className={css.flex}>
@@ -93,9 +92,7 @@ export default function App() {
         {searchedTransactions.length === 0 ? (
           <p>Nenhum resultado encontrado.</p>
         ) : (
-          <List
-            transactions={searchedTransactions}
-          />
+          <List transactions={searchedTransactions} />
         )}
       </div>
 

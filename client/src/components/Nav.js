@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import css from "./nav.module.css";
 import { defaultPeriod } from "../store/defaultPeriod";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changeCurrentPeriod } from "../store/actions/currentPeriod.actions";
 
-export default function Nav({ years }) {
+export default function Nav() {
   const [periodSelected, setPeriodSelected] = useState(defaultPeriod.text);
+  const distinctYears = useSelector((state) => state.distinctYears);
   const dispatch = useDispatch();
 
   const months = [
@@ -24,7 +25,7 @@ export default function Nav({ years }) {
   ];
 
   const periods = [];
-  years.forEach((year) => {
+  distinctYears.forEach((year) => {
     months.forEach((month) => {
       periods.push(`${month}/${year}`);
     });
