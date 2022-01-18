@@ -1,10 +1,9 @@
 import React from "react";
-import css from "./button.module.css";
 import { useDispatch } from "react-redux";
 import { remove } from "../api/api.js";
 import {changeSelectedTransaction} from '../store/actions/selectedTransaction.actions'
 import { removeTransaction } from "../store/actions/allTransactions.actions";
-
+import css from "./button.module.css";
 
 export default function Button({ type, transaction }) {
   const dispatch = useDispatch();

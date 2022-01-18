@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-modal";
 import { post, update } from "../api/api.js";
-import css from "./modal.module.css";
 import {updateTransaction, createTransaction, removeTransaction} from '../store/actions/allTransactions.actions'
 import {toggleModal} from '../store/actions/isModalOpen.actions';
-import { useDispatch, useSelector } from "react-redux";
+import css from "./modal.module.css";
+import { emptyTransaction } from "./App.js";
 
 Modal.setAppElement("#root");
 
@@ -76,8 +77,9 @@ export default function ModalTransaction({
   const handlePost = async () => {
     try {
       const data = await post(currentTransaction);
-      console.log('data');
-      console.log(data);
+      setMessage(`Salvo com sucesso!`);
+      setColorMessage({ color: "green" });
+      setCurrentTransaction(emptyTransaction);
       if (data.yearMonth === currentPeriod) {
         const { _id, type, description, category, value, yearMonthDay } = data;
         const postedTransaction = {
@@ -91,19 +93,7 @@ export default function ModalTransaction({
         };
         dispatch(createTransaction(postedTransaction));
       }
-      setMessage(`Salvo com sucesso!`);
-      setColorMessage({ color: "green" });
-      setCurrentTransaction({
-        _id: "",
-        type: "",
-        description: "",
-        descriptionLowerCase: "",
-        category: "",
-        value: 0,
-        yearMonthDay: "",
-      });
     } catch (error) {
-      console.log(error);
       setMessage(`Erro ao salvar!`);
       setColorMessage({ color: "red" });
     }

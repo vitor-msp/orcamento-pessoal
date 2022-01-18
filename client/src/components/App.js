@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { getByPeriod } from "../api/api.js";
 import { updateAllTransactions } from "../store/actions/allTransactions.actions";
 import { changeSelectedTransaction } from "../store/actions/selectedTransaction.actions";
 import { toggleModal } from "../store/actions/isModalOpen.actions";
+import { searchTransactions } from "../store/selectors/allTransactions.selectors.js";
+import { updateDistinctYears } from "../store/actions/distinctYears.actions.js";
 
 import Nav from "./Nav.js";
 import Stat from "./Stat.js";
@@ -10,11 +14,8 @@ import Search from "./Search.js";
 import List from "./List.js";
 import ModalTransaction from "./Modal.js";
 import css from "./app.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { searchTransactions } from "../store/selectors/allTransactions.selectors.js";
-import { updateDistinctYears } from "../store/actions/distinctYears.actions.js";
 
-const emptyTransaction = {
+export const emptyTransaction = {
   _id: "",
   type: "",
   description: "",
